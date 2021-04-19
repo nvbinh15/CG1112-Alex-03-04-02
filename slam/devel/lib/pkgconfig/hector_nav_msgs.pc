@@ -1,0 +1,8 @@
+prefix=/home/pi/Desktop/slam/devel
+
+Name: hector_nav_msgs
+Description: Description of hector_nav_msgs
+Version: 0.4.1
+Cflags: -I/home/pi/Desktop/slam/devel/include
+Libs: -L/home/pi/Desktop/slam/devel/lib 
+Requires: nav_msgs geometry_msgs message_runtime

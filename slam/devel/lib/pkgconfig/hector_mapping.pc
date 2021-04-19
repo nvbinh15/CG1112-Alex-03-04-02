@@ -1,0 +1,8 @@
+prefix=/home/pi/Desktop/slam/devel
+
+Name: hector_mapping
+Description: Description of hector_mapping
+Version: 0.4.1
+Cflags: -I/home/pi/Desktop/slam/devel/include -I/home/pi/Desktop/slam/src/hector_slam/hector_mapping/include -I/usr/include/eigen3
+Libs: -L/home/pi/Desktop/slam/devel/lib 
+Requires: roscpp nav_msgs visualization_msgs tf message_filters laser_geometry tf_conversions message_runtime

@@ -1,0 +1,8 @@
+prefix=/home/pi/Desktop/slam/devel
+
+Name: hector_trajectory_server
+Description: Description of hector_trajectory_server
+Version: 0.4.1
+Cflags: 
+Libs: -L/home/pi/Desktop/slam/devel/lib 
+Requires: 

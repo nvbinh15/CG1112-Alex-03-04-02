@@ -1,0 +1,8 @@
+prefix=/home/pi/Desktop/ros/install
+
+Name: turtlesim
+Description: Description of turtlesim
+Version: 0.7.1
+Cflags: -I/home/pi/Desktop/ros/install/include
+Libs: -L/home/pi/Desktop/ros/install/lib 
+Requires: geometry_msgs message_runtime std_msgs std_srvs

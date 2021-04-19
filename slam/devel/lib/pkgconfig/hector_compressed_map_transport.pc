@@ -1,0 +1,8 @@
+prefix=/home/pi/Desktop/slam/devel
+
+Name: hector_compressed_map_transport
+Description: Description of hector_compressed_map_transport
+Version: 0.4.1
+Cflags: 
+Libs: -L/home/pi/Desktop/slam/devel/lib 
+Requires: 
