@@ -31,6 +31,19 @@ typedef enum
 } TDirection;
 volatile TDirection dir = STOP;
 
+/*
+ * Alex's configuration constants
+ */
+
+/* Bare Metal
+// Define Pins
+#define PIN_2 (1 << 2)
+#define PIN_3 (1 << 3)
+#define PIN_5 (1 << 5)
+#define PIN_6 (1 << 6)
+#define PIN_10 (1 << 10)
+*/
+
 // Number of ticks per revolution from the 
 // wheel encoder.
 
@@ -50,8 +63,7 @@ volatile TDirection dir = STOP;
 #define RR                  10  // Right reverse pin
 
 
-#define IRSensor          A3
-#define buzzer            A1
+#define IRsensor          A3
 
 #define ALEX_LENGTH      16
 #define ALEX_BREADTH      6
@@ -322,6 +334,8 @@ void leftISR()
   } else if (dir == RIGHT) {
     leftForwardTicksTurns++;
   }
+  //dbprintf("L");
+  //dbprintf("%d", (leftTicks * (WHEEL_CIRC / COUNTS_PER_REV)));
 }
 
 void rightISR()
@@ -335,6 +349,8 @@ void rightISR()
   } else if (dir == RIGHT) {
     rightReverseTicksTurns++;
   }
+  //dbprintf("R");
+  //dbprintf("%d", (rightTicks * (WHEEL_CIRC / COUNTS_PER_REV)));
 }
 
 // Set up the external interrupt pins INT0 and INT1
@@ -345,7 +361,7 @@ void setupEINT()
   // falling edge triggered. Remember to enable
   // the INT0 and INT1 interrupts.
   
-  // Use bare-metal to configure pins 2 and 3 to be
+   // Use bare-metal to configure pins 2 and 3 to be
   // falling edge triggered. Remember to enable
   // the INT0 and INT1 interrupts.
 
@@ -355,6 +371,7 @@ void setupEINT()
   // Enable INT1 and INT0
   EIMSK |= 0b00000011;
   sei();
+//  DDRD &= 0b11110011;
 }
 
 // Implement the external interrupt ISRs below.
@@ -402,6 +419,11 @@ ISR(INT1_vect) {
 //  UCSR0B |= 0b11011000;
 //}
 
+/* Bare Metal
+void startSerial() {
+    UCSR0B = 0b00011000;
+    initBuffer(buf, 1000);
+*/
 
 void setupSerial()
 {
@@ -553,7 +575,8 @@ void setupMotors() {
     
     TCNT2 = 0;    
     TCCR2A |= 0b10000001;   
-    TIMSK2 |= 0b00000010;   
+    TIMSK2 |= 0b00000010;
+//    
 }
 
 
@@ -641,7 +664,7 @@ void forward(float dist, float speed)
   // This will be replaced later with bare-metal code.
 
   analogWriteBareMetal(LF, val);
-  analogWriteBareMetal(RF, 0.85 * val);
+  analogWriteBareMetal(RF, 0.9 * val);
   analogWriteBareMetal(LR, 0);
   analogWriteBareMetal(RR, 0);
 
@@ -674,7 +697,7 @@ void reverse(float dist, float speed)
   // RF = Right forward pin, RR = Right reverse pin
   // This will be replaced later with bare-metal code.
   analogWriteBareMetal(LR, val);
-  analogWriteBareMetal(RR, 0.85 * val);
+  analogWriteBareMetal(RR, 0.9 * val);
   analogWriteBareMetal(LF, 0);
   analogWriteBareMetal(RF, 0);
 }
@@ -739,6 +762,16 @@ void stop()
   analogWriteBareMetal(LR, 0);
   analogWriteBareMetal(RF, 0);
   analogWriteBareMetal(RR, 0);
+//
+//    TCCR0A |= 0b00000001;    
+//    TCCR1A |= 0b00000001;
+//    TCCR2A |= 0b00000001;   
+//
+//    OCR0A = 0;
+//    OCR0B = 0;
+//    OCR1B = 0;
+//    OCR2A = 0;
+
 }
 
 /*
@@ -776,6 +809,8 @@ void initializeState()
 
 void readColor() {
 
+    bool something;
+    // turn on leds, read rgb color, turn off leds
     digitalWrite(12, HIGH);
     delay(25);
     color_value = DONTKNOW;
@@ -876,8 +911,6 @@ void setup() {
 
   // pin 12 is for rgb leds
   pinMode(12, OUTPUT);
-  pinMode(IRSensor, INPUT);
-  pinMode(buzzer, OUTPUT);
   // put your setup code here, to run once:
   vincentDiagonal = sqrt((ALEX_LENGTH * ALEX_LENGTH) + (ALEX_BREADTH * ALEX_BREADTH));
   vincentCirc = PI * vincentDiagonal;
@@ -896,6 +929,7 @@ void setup() {
   apds.enableLightSensor(false); //lyzadded
   delay(500);
   //if (something) digitalWrite(13, HIGH);
+  pinMode(IRsensor, INPUT);
 }
 
 void handlePacket(TPacket *packet)
